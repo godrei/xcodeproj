@@ -30,9 +30,7 @@ type PBXNativeTarget struct {
 // ParsePBXNativeTargetSection ...
 func ParsePBXNativeTargetSection(pbxNativeTargetSectionLines []string) []PBXNativeTarget {
 	pbxNativeTargets := []PBXNativeTarget{}
-
 	pbxNativeTarget := PBXNativeTarget{}
-
 	isPBXNativeTarget := false
 
 	// // BAAFFED019EE788800F3AC91 /* SampleAppWithCocoapods */ = {
@@ -57,19 +55,22 @@ func ParsePBXNativeTargetSection(pbxNativeTargetSectionLines []string) []PBXNati
 	// productType = "com.apple.product-type.bundle.unit-test";
 	productTypeRegexp := regexp.MustCompile(`productType = (?P<productType>.*);`)
 
+	// BAC384061BA9F569005CFE20 /* Sources */,
+	buildPhaseRegexp := regexp.MustCompile(`\s*(?P<id>[A-Z0-9]+) /\* (?P<ype>.*) \*/,`)
 	buildPhasesBeginPattern := `buildPhases = (`
 	buildPhasesEndPattern := `);`
-	buildPhaseRegexp := regexp.MustCompile(`\s*(?P<id>[A-Z0-9]+) /\* (?P<ype>.*) \*/,`)
 	isBuildPhases := false
 
+	// ?
+	buildRuleRegexp := regexp.MustCompile(`\s*(?P<id>[A-Z0-9]+) /\* (?P<ype>.*) \*/,`)
 	buildRulesBeginPattern := `buildRules = (`
 	buildRulesEndPattern := `);`
-	buildRuleRegexp := regexp.MustCompile(`\s*(?P<id>[A-Z0-9]+) /\* (?P<ype>.*) \*/,`)
 	isBuildRules := false
 
+	// BAC384251BA9F569005CFE20 /* PBXTargetDependency */,
+	dependencieRegexp := regexp.MustCompile(`\s*(?P<id>[A-Z0-9]+) /\* (?P<isa>.*) \*/,`)
 	dependenciesBeginPattern := `dependencies = (`
 	dependenciesEndPattern := `);`
-	dependencieRegexp := regexp.MustCompile(`\s*(?P<id>[A-Z0-9]+) /\* (?P<isa>.*) \*/,`)
 	isDependencies := false
 
 	for _, line := range pbxNativeTargetSectionLines {
@@ -95,7 +96,6 @@ func ParsePBXNativeTargetSection(pbxNativeTargetSectionLines []string) []PBXNati
 		}
 
 		// PBXNativeTarget
-
 		if matches := isaRegexp.FindStringSubmatch(line); len(matches) == 2 {
 			pbxNativeTarget.isa = strings.Trim(matches[1], `"`)
 		}
@@ -119,6 +119,7 @@ func ParsePBXNativeTargetSection(pbxNativeTargetSectionLines []string) []PBXNati
 		if matches := productTypeRegexp.FindStringSubmatch(line); len(matches) == 2 {
 			pbxNativeTarget.productType = strings.Trim(matches[1], `"`)
 		}
+		// -----
 
 		// buildPhases
 		if isBuildPhases && line == buildPhasesEndPattern {

@@ -23,19 +23,18 @@ func main() {
 	}
 
 	for isa, lines := range isaSectionLinesMap {
-		fmt.Printf("%s\n", isa)
-		fmt.Println("")
-		for _, line := range lines {
-			fmt.Printf("%s\n", line)
-		}
-		fmt.Println("-----")
-		fmt.Println("")
-
 		if isa == "PBXNativeTarget" {
 			pbxNativeTargets := pbxproj.ParsePBXNativeTargetSection(lines)
 			for _, pbxNativeTarget := range pbxNativeTargets {
-				fmt.Println("-----")
+				fmt.Println("PBXNativeTarget")
 				fmt.Printf("%#v\n", pbxNativeTarget)
+				fmt.Println("-----")
+			}
+		} else if isa == "PBXTargetDependency" {
+			pbxTargetDependencies := pbxproj.ParsePBXTargetDependencySection(lines)
+			for _, pbxTargetDependency := range pbxTargetDependencies {
+				fmt.Println("PBXTargetDependency")
+				fmt.Printf("%#v\n", pbxTargetDependency)
 				fmt.Println("-----")
 			}
 		}

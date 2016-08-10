@@ -1,11 +1,9 @@
 # xcodeproj-parser
 
-## .xcodeproj file parser
-
 Parses .xcodeproj files, without any external dependency. 
 It only uses regular expression searches and string comparison for the parsing. 
 
-### pbxproj objects
+## pbxproj objects
 
 - [ ] PBXBuildFile
 - [ ] PBXContainerItemProxy
@@ -16,7 +14,7 @@ It only uses regular expression searches and string comparison for the parsing.
 - [ ] PBXProject
 - [ ] PBXResourcesBuildPhase
 - [ ] PBXSourcesBuildPhase
-- [ ] PBXTargetDependency
+- [x] PBXTargetDependency
 - [ ] PBXVariantGroup
 - [ ] XCBuildConfiguration
 - [ ] XCConfigurationList
